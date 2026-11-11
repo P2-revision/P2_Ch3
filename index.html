@@ -1,0 +1,1983 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="sticker">
+  <title>小二數碼小公民：知識大冒險！</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces */
+      --background: #fef7ff;
+      --surface-container-low: #ffffff;
+      --surface-container: #f8eef8;
+      --surface-container-high: #f2e8f2;
+
+      /* Ink */
+      --on-surface: #2e1a28;
+      --on-surface-variant: #604868;
+
+      /* Rules */
+      --outline: #907898;
+      --outline-variant: #dcc8e0;
+
+      /* Accents */
+      --primary: #c2207f;
+      --on-primary: #ffffff;
+      --primary-container: #f080c0;
+      --on-primary-container: #2e1a28;
+      --secondary: #7c52aa;
+      --on-secondary: #ffffff;
+      --tertiary: #0096cc;
+      --on-tertiary: #ffffff;
+      --error: #c53030;
+      --on-error: #ffffff;
+
+      /* Semantics */
+      --positive: #1b873f;
+      --on-positive: #ffffff;
+      --positive-container: #e6f7ec;
+      --warning: #d96a00;
+      --on-warning: #ffffff;
+      --warning-container: #fff1e5;
+      --focus: #c2207f;
+
+      /* Data / Sticker Colors */
+      --data-1: #c2207f;
+      --data-2: #7c52aa;
+      --data-3: #0096cc;
+      --data-4: #d96a00;
+      --data-5: #1b873f;
+      --data-context: #c8b8d0;
+
+      /* Fonts */
+      --font-headline: 'Noto Sans TC', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: 'Noto Sans TC', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-label: 'Noto Sans TC', 'DM Sans', monospace;
+
+      /* Type scale for tool/quiz */
+      --display-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1.05rem);
+      --label-size: 0.8125rem;
+
+      /* Shape */
+      --rounded-sm: 0.75rem;
+      --rounded: 1.25rem;
+      --rounded-lg: 2rem;
+      --rounded-full: 9999px;
+
+      /* Spacing scale */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+
+      /* Style effects - Tinted shadows */
+      --shadow-pink: 0 6px 18px rgb(194 32 127 / 0.18);
+      --shadow-pink-deep: 0 10px 28px rgb(194 32 127 / 0.32);
+      --shadow-grape: 0 6px 18px rgb(124 82 170 / 0.18);
+      --shadow-sky: 0 6px 18px rgb(0 150 204 / 0.18);
+      --shadow-gold: 0 6px 18px rgb(217 106 0 / 0.2);
+      --shadow-green: 0 6px 18px rgb(27 135 63 / 0.18);
+      --shadow-track: inset 0 2px 4px rgb(0 0 0 / 0.05);
+      --pop-scale: scale(1.03);
+      --lift: translateY(-4px);
+      --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+      --dur-long: 420ms;
+    }
+
+    /* Base Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    html, body {
+      overflow-x: clip;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background);
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    header {
+      position: static !important;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    /* Layout Containers */
+    .app-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: var(--space-md) var(--space-md) var(--space-2xl);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation / Status Bar */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface-container-low);
+      border-radius: var(--rounded-full);
+      box-shadow: var(--shadow-pink);
+      margin-bottom: var(--space-lg);
+    }
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-weight: 900;
+      font-size: var(--subhead-size);
+      color: var(--primary);
+    }
+    .brand-icon {
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border-radius: var(--rounded-full);
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .star-counter-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      background: var(--warning-container);
+      color: var(--warning);
+      font-weight: 800;
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      box-shadow: var(--shadow-gold);
+      transition: transform var(--dur-short) var(--ease-bounce);
+    }
+    .star-counter-pill.pop {
+      transform: scale(1.2);
+    }
+    .icon-btn {
+      background: var(--surface-container);
+      border: 2px solid var(--outline-variant);
+      color: var(--on-surface-variant);
+      border-radius: var(--rounded-full);
+      width: 44px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform var(--dur-short) var(--ease-bounce), background-color var(--dur-short) var(--ease-out);
+    }
+    .icon-btn:hover {
+      transform: var(--pop-scale);
+      background: var(--surface-container-high);
+      color: var(--primary);
+    }
+    .icon-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Sticker Card Pattern */
+    .card {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded);
+      box-shadow: var(--shadow-pink);
+      padding: var(--space-lg);
+      position: relative;
+    }
+    .card-grape {
+      box-shadow: var(--shadow-grape);
+    }
+    .card-sky {
+      box-shadow: var(--shadow-sky);
+    }
+    .card-gold {
+      box-shadow: var(--shadow-gold);
+    }
+    .hero-card {
+      border-radius: var(--rounded-lg);
+      padding: var(--space-xl) var(--space-lg);
+      text-align: center;
+      background: linear-gradient(180deg, var(--surface-container-low) 0%, var(--surface-container) 100%);
+    }
+
+    /* Typography & Pop Headline */
+    .display {
+      font-family: var(--font-headline);
+      font-weight: 900;
+      font-size: var(--display-size);
+      line-height: 1.15;
+      color: var(--on-surface);
+      margin: 0 0 var(--space-sm);
+    }
+    .display em {
+      font-style: normal;
+      color: var(--primary);
+    }
+    .subhead {
+      font-size: var(--subhead-size);
+      color: var(--on-surface-variant);
+      margin: 0 0 var(--space-lg);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      border-radius: var(--rounded-full);
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      padding: var(--space-md) var(--space-xl);
+      min-height: 48px;
+      text-decoration: none;
+      transition: transform var(--dur-short) var(--ease-bounce), box-shadow var(--dur-short) var(--ease-out);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+      box-shadow: var(--shadow-pink);
+      font-size: 1.125rem;
+    }
+    .btn-primary:hover {
+      transform: var(--pop-scale);
+      box-shadow: var(--shadow-pink-deep);
+    }
+    .btn-primary:active {
+      transform: scale(0.97);
+    }
+    .btn-secondary {
+      background: var(--secondary);
+      color: var(--on-secondary);
+      box-shadow: var(--shadow-grape);
+    }
+    .btn-secondary:hover {
+      transform: var(--pop-scale);
+    }
+    .btn-secondary:active {
+      transform: scale(0.97);
+    }
+    .btn-outline {
+      background: var(--surface-container-low);
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      box-shadow: var(--shadow-pink);
+    }
+    .btn-outline:hover {
+      background: var(--surface-container);
+      transform: var(--pop-scale);
+    }
+
+    /* Badges & Chips */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--rounded-full);
+      font-size: var(--label-size);
+      font-weight: 700;
+    }
+    .badge-bubblegum {
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .badge-grape {
+      background: var(--surface-container);
+      border: 1.5px solid var(--secondary);
+      color: var(--secondary);
+    }
+    .badge-sky {
+      background: var(--surface-container);
+      border: 1.5px solid var(--tertiary);
+      color: var(--tertiary);
+    }
+    .badge-gold {
+      background: var(--warning-container);
+      border: 1.5px solid var(--warning);
+      color: var(--warning);
+    }
+
+    /* Screen Transitions */
+    .game-screen {
+      display: none;
+      animation: fadeIn var(--dur-long) var(--ease-out);
+    }
+    .game-screen.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Welcome Screen Special Elements */
+    .mascot-container {
+      margin: var(--space-md) auto;
+      width: 140px;
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-container-high);
+      border-radius: var(--rounded-full);
+      box-shadow: var(--shadow-pink);
+      animation: gentleBounce 3s ease-in-out infinite;
+    }
+    @keyframes gentleBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+      gap: var(--space-md);
+      margin: var(--space-xl) 0;
+      text-align: left;
+    }
+    .feature-card {
+      background: var(--surface-container-low);
+      padding: var(--space-md);
+      border-radius: var(--rounded);
+      box-shadow: var(--shadow-sky);
+      display: flex;
+      gap: var(--space-sm);
+      align-items: flex-start;
+    }
+    .feature-card:nth-child(2) {
+      box-shadow: var(--shadow-pink);
+    }
+    .feature-card:nth-child(3) {
+      box-shadow: var(--shadow-grape);
+    }
+    .feature-icon-box {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--rounded-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: var(--surface-container);
+      color: var(--primary);
+      font-size: 1.25rem;
+    }
+
+    /* Quiz Play Screen Elements */
+    .progress-header {
+      margin-bottom: var(--space-lg);
+    }
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-xs);
+      font-weight: 700;
+      font-size: var(--label-size);
+      color: var(--on-surface-variant);
+    }
+    .progress-track {
+      height: 16px;
+      background: var(--surface-container-high);
+      border-radius: var(--rounded-full);
+      overflow: hidden;
+      padding: 2px;
+      box-shadow: var(--shadow-track);
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--tertiary), var(--primary));
+      border-radius: var(--rounded-full);
+      transition: width var(--dur-long) var(--ease-bounce);
+      width: 14.28%;
+    }
+    .steps-dots {
+      display: flex;
+      justify-content: space-between;
+      margin-top: var(--space-xs);
+      padding: 0 var(--space-xs);
+    }
+    .step-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: var(--rounded-full);
+      background: var(--outline-variant);
+      transition: background-color var(--dur-short), transform var(--dur-short);
+    }
+    .step-dot.completed {
+      background: var(--primary);
+    }
+    .step-dot.active {
+      background: var(--warning);
+      transform: scale(1.3);
+    }
+
+    .question-card {
+      margin-bottom: var(--space-lg);
+    }
+    .question-badge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+      flex-wrap: wrap;
+    }
+    .scenario-art {
+      width: 100%;
+      height: 150px;
+      background: var(--surface-container);
+      border-radius: var(--rounded);
+      margin-bottom: var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .scenario-art svg {
+      max-height: 130px;
+      max-width: 90%;
+    }
+    .question-prompt {
+      font-size: 1.2rem;
+      font-weight: 800;
+      line-height: 1.5;
+      color: var(--on-surface);
+      margin-bottom: var(--space-lg);
+    }
+
+    /* Option Cards */
+    .options-grid {
+      display: grid;
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+    .option-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      text-align: left;
+      gap: var(--space-md);
+      background: var(--surface-container-low);
+      border: 3px solid var(--outline-variant);
+      border-radius: var(--rounded);
+      padding: var(--space-md) var(--space-lg);
+      cursor: pointer;
+      color: var(--on-surface);
+      font-size: 1.05rem;
+      font-weight: 700;
+      box-shadow: var(--shadow-grape);
+      transition: transform var(--dur-short) var(--ease-bounce),
+                  border-color var(--dur-short) var(--ease-out),
+                  background-color var(--dur-short) var(--ease-out),
+                  box-shadow var(--dur-short) var(--ease-out);
+      min-height: 64px;
+    }
+    .option-btn:hover:not(:disabled) {
+      transform: var(--pop-scale);
+      border-color: var(--primary);
+      box-shadow: var(--shadow-pink-deep);
+    }
+    .option-btn:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+    .option-letter {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--rounded-full);
+      background: var(--surface-container);
+      color: var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+      border: 2px solid var(--outline-variant);
+      transition: background-color var(--dur-short), color var(--dur-short);
+    }
+    .option-text {
+      flex-grow: 1;
+    }
+    .option-status-icon {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Option States */
+    .option-btn.state-correct {
+      background: var(--positive-container);
+      border-color: var(--positive);
+      color: var(--on-surface);
+      box-shadow: var(--shadow-green);
+    }
+    .option-btn.state-correct .option-letter {
+      background: var(--positive);
+      color: var(--on-positive);
+      border-color: var(--positive);
+    }
+    .option-btn.state-correct .option-status-icon {
+      display: flex;
+      color: var(--positive);
+    }
+
+    .option-btn.state-wrong {
+      background: var(--warning-container);
+      border-color: var(--warning);
+      color: var(--on-surface);
+      box-shadow: var(--shadow-gold);
+    }
+    .option-btn.state-wrong .option-letter {
+      background: var(--warning);
+      color: var(--on-warning);
+      border-color: var(--warning);
+    }
+    .option-btn.state-wrong .option-status-icon {
+      display: flex;
+      color: var(--warning);
+    }
+
+    .option-btn:disabled {
+      cursor: default;
+      opacity: 0.9;
+    }
+
+    /* Instant Feedback Card */
+    .feedback-box {
+      display: none;
+      border-radius: var(--rounded);
+      padding: var(--space-lg);
+      margin-top: var(--space-md);
+      animation: popIn var(--dur-short) var(--ease-bounce);
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.95); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .feedback-box.correct {
+      display: block;
+      background: var(--positive-container);
+      border: 2px solid var(--positive);
+      box-shadow: var(--shadow-green);
+    }
+    .feedback-box.wrong {
+      display: block;
+      background: var(--warning-container);
+      border: 2px solid var(--warning);
+      box-shadow: var(--shadow-gold);
+    }
+    .feedback-title-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 1.2rem;
+      font-weight: 900;
+      margin-bottom: var(--space-xs);
+    }
+    .feedback-box.correct .feedback-title-row {
+      color: var(--positive);
+    }
+    .feedback-box.wrong .feedback-title-row {
+      color: var(--warning);
+    }
+    .feedback-msg {
+      font-size: 1rem;
+      color: var(--on-surface);
+      margin-bottom: var(--space-md);
+      line-height: 1.6;
+    }
+    .feedback-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    /* Graduation / Victory Screen */
+    .victory-card {
+      text-align: center;
+      padding: var(--space-xl) var(--space-lg);
+      margin-bottom: var(--space-xl);
+    }
+    .trophy-wrap {
+      width: 130px;
+      height: 130px;
+      margin: 0 auto var(--space-md);
+      border-radius: var(--rounded-full);
+      background: var(--warning-container);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-gold);
+      animation: floatTrophy 2.5s ease-in-out infinite;
+    }
+    @keyframes floatTrophy {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(3deg); }
+    }
+    .score-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-xl);
+      background: var(--surface-container);
+      border-radius: var(--rounded-full);
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--primary);
+      margin-bottom: var(--space-lg);
+      box-shadow: var(--shadow-pink);
+    }
+    .stars-display {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-xs);
+      font-size: 2rem;
+      margin-bottom: var(--space-md);
+    }
+
+    /* Badges Unlocked Section */
+    .section-title {
+      font-weight: 900;
+      font-size: 1.3rem;
+      color: var(--on-surface);
+      margin: var(--space-xl) 0 var(--space-md);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .badges-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+    .badge-item-card {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded);
+      padding: var(--space-md) var(--space-sm);
+      text-align: center;
+      box-shadow: var(--shadow-pink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-xs);
+      transition: transform var(--dur-short) var(--ease-bounce);
+    }
+    .badge-item-card:nth-child(2) { box-shadow: var(--shadow-sky); }
+    .badge-item-card:nth-child(3) { box-shadow: var(--shadow-gold); }
+    .badge-item-card:nth-child(4) { box-shadow: var(--shadow-grape); }
+    .badge-item-card:nth-child(5) { box-shadow: var(--shadow-green); }
+    .badge-item-card:hover {
+      transform: var(--lift);
+    }
+    .badge-graphic {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--rounded-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      background: var(--surface-container);
+      margin-bottom: var(--space-xs);
+    }
+    .badge-name {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--on-surface);
+    }
+    .badge-desc {
+      font-size: 0.75rem;
+      color: var(--on-surface-variant);
+      line-height: 1.3;
+    }
+
+    /* Revision Flashcards Section */
+    .revision-box {
+      background: var(--surface-container-low);
+      border-radius: var(--rounded);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-grape);
+      margin-bottom: var(--space-xl);
+    }
+    .revision-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+    .revision-card {
+      background: var(--surface-container);
+      border-radius: var(--rounded-sm);
+      padding: var(--space-md);
+      border-left: 6px solid var(--primary);
+    }
+    .revision-card:nth-child(2) { border-left-color: var(--tertiary); }
+    .revision-card:nth-child(3) { border-left-color: var(--secondary); }
+    .revision-card:nth-child(4) { border-left-color: var(--warning); }
+    .revision-card:nth-child(5) { border-left-color: var(--positive); }
+    .revision-card:nth-child(6) { border-left-color: var(--data-1); }
+    .revision-card-title {
+      font-weight: 800;
+      color: var(--on-surface);
+      margin-bottom: var(--space-xs);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .revision-card-text {
+      font-size: 0.92rem;
+      color: var(--on-surface-variant);
+      margin: 0;
+    }
+
+    /* Interactive Certificate Modal / Print Area */
+    .certificate-card {
+      background: var(--surface-container-low);
+      border: 4px dashed var(--primary);
+      border-radius: var(--rounded-lg);
+      padding: var(--space-xl);
+      text-align: center;
+      margin: var(--space-lg) 0;
+      position: relative;
+      box-shadow: var(--shadow-pink-deep);
+    }
+    .cert-seal {
+      position: absolute;
+      bottom: var(--space-md);
+      right: var(--space-md);
+      width: 70px;
+      height: 70px;
+      border-radius: var(--rounded-full);
+      background: var(--primary);
+      color: var(--on-primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 0.75rem;
+      box-shadow: var(--shadow-pink);
+      transform: rotate(-10deg);
+    }
+
+    /* Action Buttons Footer */
+    .btn-row {
+      display: flex;
+      gap: var(--space-md);
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: var(--space-lg);
+    }
+
+    /* Confetti Canvas */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Responsive Adaptation */
+    @media (max-width: 640px) {
+      .app-container {
+        padding: var(--space-sm) var(--space-sm) var(--space-xl);
+      }
+      .card {
+        padding: var(--space-md);
+      }
+      .hero-card {
+        padding: var(--space-lg) var(--space-md);
+      }
+      .display {
+        font-size: 1.6rem;
+      }
+      .question-prompt {
+        font-size: 1.05rem;
+      }
+      .option-btn {
+        padding: var(--space-sm) var(--space-md);
+        font-size: 0.95rem;
+      }
+      .btn {
+        width: 100%;
+      }
+      .btn-row {
+        flex-direction: column;
+      }
+      .badges-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .revision-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Motion Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .mascot-container, .trophy-wrap {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+  <div class="app-container">
+    <!-- Top Bar Navigation -->
+    <header class="top-bar">
+      <div class="brand-pill">
+        <span class="brand-icon" aria-hidden="true">🛡️</span>
+        <span>數碼小公民大冒險</span>
+      </div>
+      <div class="top-actions">
+        <div class="star-counter-pill" id="star-counter-display" title="收集到的星星">
+          <span aria-hidden="true">⭐</span>
+          <span id="star-count">0</span> / 7
+        </div>
+        <button class="icon-btn" id="sound-toggle-btn" aria-label="切換音效開關" title="音效開關">
+          <span id="sound-icon" aria-hidden="true">🔊</span>
+        </button>
+        <button class="icon-btn" id="restart-game-btn" aria-label="重新開始遊戲" title="重新開始">
+          <span aria-hidden="true">🔄</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- SCREEN 1: 歡迎開始畫面 -->
+    <main id="screen-welcome" class="game-screen active">
+      <div class="card hero-card">
+        <div class="mascot-container" aria-hidden="true">
+          <!-- Cute Friendly Shield Mascot SVG -->
+          <svg viewBox="0 0 100 100" width="100" height="100">
+            <!-- Shield Body -->
+            <path d="M50 8 C68 8, 88 18, 88 40 C88 66, 50 92, 50 92 C50 92, 12 66, 12 40 C12 18, 32 8, 50 8 Z" fill="#c2207f" />
+            <path d="M50 14 C65 14, 82 22, 82 41 C82 63, 50 85, 50 85 C50 85, 18 63, 18 41 C18 22, 35 14, 50 14 Z" fill="#ffffff" />
+            <!-- Mascot Face -->
+            <!-- Eyes -->
+            <ellipse cx="38" cy="42" rx="4.5" ry="6" fill="#2e1a28" />
+            <circle cx="36.5" cy="40" r="1.8" fill="#ffffff" />
+            <ellipse cx="62" cy="42" rx="4.5" ry="6" fill="#2e1a28" />
+            <circle cx="60.5" cy="40" r="1.8" fill="#ffffff" />
+            <!-- Rosy Cheeks -->
+            <ellipse cx="32" cy="48" rx="4" ry="2.5" fill="#f080c0" />
+            <ellipse cx="68" cy="48" rx="4" ry="2.5" fill="#f080c0" />
+            <!-- Cheerful Smile -->
+            <path d="M42 50 Q50 58 58 50" stroke="#2e1a28" stroke-width="2.5" stroke-linecap="round" fill="none" />
+            <!-- Small Star on Head -->
+            <polygon points="50,22 52,27 57,27 53,30 55,35 50,32 45,35 47,30 43,27 48,27" fill="#d96a00" />
+          </svg>
+        </div>
+
+        <span class="badge badge-bubblegum" style="margin-bottom: var(--space-sm);">小學二年級 · 常識與資訊素養</span>
+        <h1 class="display">小二數碼小公民：<em>知識大冒險</em>！</h1>
+        <p class="subhead">小朋友，在神奇的網絡世界裏，你懂得保護私隱、守護密碼和尊重版權嗎？快來挑戰 7 道情境關卡，收集榮譽星星與特工徽章！</p>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon-box" aria-hidden="true">🔒</div>
+            <div>
+              <div style="font-weight: 800; color: var(--on-surface);">個人私隱與密碼</div>
+              <div style="font-size: 0.85rem; color: var(--on-surface-variant);">不透露姓名地址、保護密碼不分享。</div>
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-box" aria-hidden="true">📸</div>
+            <div>
+              <div style="font-weight: 800; color: var(--on-surface);">照片與影片保護</div>
+              <div style="font-size: 0.85rem; color: var(--on-surface-variant);">未經同意不上載，尊重身邊同學。</div>
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-box" aria-hidden="true">📚</div>
+            <div>
+              <div style="font-weight: 800; color: var(--on-surface);">尊重版權拒抄襲</div>
+              <div style="font-size: 0.85rem; color: var(--on-surface-variant);">支持正版平台，做專題研習用自己文字。</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: var(--space-lg);">
+          <button class="btn btn-primary" id="start-game-btn">
+            <span>🌟 準備好喇！開始冒險</span>
+            <span aria-hidden="true">➔</span>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- SCREEN 2: 互動答題畫面 -->
+    <main id="screen-quiz" class="game-screen">
+      <!-- 關卡進度條 -->
+      <section class="progress-header" aria-label="挑戰進度">
+        <div class="progress-labels">
+          <span id="question-index-label">關卡 1 / 7</span>
+          <span id="category-label">🏷️ 個人私隱小知識</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-bar-fill"></div>
+        </div>
+        <div class="steps-dots" id="steps-dots-container" aria-hidden="true">
+          <!-- 7 dots generated by JS -->
+        </div>
+      </section>
+
+      <!-- 題目卡片 -->
+      <section class="card question-card" id="current-question-card">
+        <div class="question-badge-row">
+          <span class="badge badge-bubblegum" id="q-badge-text">第 1 關</span>
+          <span class="badge badge-grape" id="q-theme-tag">個人私隱保護</span>
+        </div>
+
+        <!-- 向量情境插圖 -->
+        <div class="scenario-art" id="scenario-illustration-box">
+          <!-- Injected SVG via JS -->
+        </div>
+
+        <!-- 題目情境文字 -->
+        <div class="question-prompt" id="question-prompt-text">
+          題目加載中...
+        </div>
+
+        <!-- 三個選項按鈕 -->
+        <div class="options-grid" id="options-container" role="radiogroup" aria-labelledby="question-prompt-text">
+          <!-- Injected options buttons via JS -->
+        </div>
+
+        <!-- 即時反饋卡片 -->
+        <div class="feedback-box" id="feedback-card" role="alert" aria-live="polite">
+          <div class="feedback-title-row">
+            <span id="feedback-icon" aria-hidden="true">🎉</span>
+            <span id="feedback-title">答對了！</span>
+          </div>
+          <div class="feedback-msg" id="feedback-text">
+            詳細解析說明...
+          </div>
+          <div class="feedback-actions">
+            <button class="btn btn-primary" id="next-question-btn">
+              <span id="next-btn-text">下一關</span>
+              <span aria-hidden="true">➔</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- SCREEN 3: 通關結算與榮譽畫面 -->
+    <main id="screen-result" class="game-screen">
+      <div class="card victory-card">
+        <div class="trophy-wrap" aria-hidden="true">
+          <!-- Joyful Gold Trophy SVG -->
+          <svg viewBox="0 0 100 100" width="80" height="80">
+            <path d="M30 20 L70 20 L66 52 C66 64 58 70 50 70 C42 70 34 64 34 52 Z" fill="#d96a00" />
+            <path d="M33 24 L67 24 L63 50 C63 60 56 66 50 66 C44 66 37 60 37 50 Z" fill="#f5a623" />
+            <path d="M30 28 C18 28 14 38 14 46 C14 55 24 60 33 58" stroke="#d96a00" stroke-width="5" stroke-linecap="round" fill="none" />
+            <path d="M70 28 C82 28 86 38 86 46 C86 55 76 60 67 58" stroke="#d96a00" stroke-width="5" stroke-linecap="round" fill="none" />
+            <!-- Stem & Base -->
+            <rect x="46" y="70" width="8" height="12" fill="#d96a00" />
+            <rect x="32" y="82" width="36" height="10" rx="4" fill="#c2207f" />
+            <!-- Star on Trophy -->
+            <polygon points="50,34 52,39 57,39 53,42 55,47 50,44 45,47 47,42 43,39 48,39" fill="#ffffff" />
+          </svg>
+        </div>
+
+        <span class="badge badge-gold" style="font-size: 1rem; padding: var(--space-xs) var(--space-lg); margin-bottom: var(--space-sm);">榮譽通關獎狀</span>
+        <h2 class="display" id="final-status-title">太棒了！你是<em>星級數碼小公民</em>！</h2>
+        
+        <div class="stars-display" id="final-stars-row" aria-label="星星評級">
+          <!-- Stars generated by JS -->
+        </div>
+
+        <div class="score-banner">
+          <span>總得分：</span>
+          <span id="final-score-text">7 / 7 題全對</span>
+        </div>
+        <p class="subhead" id="final-commentary-text">
+          你已經完全掌握保護私隱、密碼安全、尊重知識產權與誠實研習的重點！
+        </p>
+
+        <!-- 獎勵徽章展示區 -->
+        <h3 class="section-title">
+          <span aria-hidden="true">🎖️</span>
+          <span>你贏得的榮譽特工徽章</span>
+        </h3>
+        <div class="badges-grid" id="unlocked-badges-container">
+          <!-- 5 badges injected via JS -->
+        </div>
+
+        <!-- 專題課文重點溫習卡 (數碼公民 6 大金句秘笈) -->
+        <div class="revision-box">
+          <h3 class="section-title" style="margin-top: 0;">
+            <span aria-hidden="true">📖</span>
+            <span>數碼小公民 · 課文溫習秘笈（6 大守則）</span>
+          </h3>
+          <div class="revision-grid">
+            <div class="revision-card">
+              <div class="revision-card-title"><span>🛡️ 1. 私隱要保密</span></div>
+              <p class="revision-card-text">真實姓名、年齡、出生日期、就讀學校名稱和居住區域，絕對不可透露給網上陌生人。</p>
+            </div>
+            <div class="revision-card">
+              <div class="revision-card-title"><span>📸 2. 相片先問過</span></div>
+              <p class="revision-card-text">未經同學本人以及家長或老師的同意，千萬不要隨意把照片或影片發佈到網絡上。</p>
+            </div>
+            <div class="revision-card">
+              <div class="revision-card-title"><span>🔑 3. 密碼不外洩</span></div>
+              <p class="revision-card-text">密碼只可告訴爸爸媽媽，切勿分享給朋友或同學；不用簡單數字，並要定期更換密碼。</p>
+            </div>
+            <div class="revision-card">
+              <div class="revision-card-title"><span>📀 4. 尊重用正版</span></div>
+              <p class="revision-card-text">尊重創作者的心血與知識產權，拒絕下載或使用盜版軟件、歌曲、卡通和電影。</p>
+            </div>
+            <div class="revision-card">
+              <div class="revision-card-title"><span>🔍 5. 研習求真確</span></div>
+              <p class="revision-card-text">做常識專題研習時，應到圖書館借書或到政府機構等可靠網站搜集資料，並向師長求證。</p>
+            </div>
+            <div class="revision-card">
+              <div class="revision-card-title"><span>✍️ 6. 拒絕抄襲他</span></div>
+              <p class="revision-card-text">不可直接複製貼上（Copy & Paste）別人的文章或功課，要用自己的文字寫出並註明出處。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 操作按鈕列 -->
+        <div class="btn-row">
+          <button class="btn btn-primary" id="play-again-btn">
+            <span aria-hidden="true">🔄</span>
+            <span>再挑戰一次</span>
+          </button>
+          <button class="btn btn-outline" id="download-cert-btn">
+            <span aria-hidden="true">📜</span>
+            <span>領取數碼小公民獎狀</span>
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <api-shim></api-shim>
+  <script>
+    /* =========================================================
+       1. 題庫與課文核心數據 (香港小二常識與資訊素養)
+       ========================================================= */
+    const QUIZ_QUESTIONS = [
+      {
+        id: 1,
+        category: "個人私隱小知識",
+        badge: "第 1 關 · 私隱安全",
+        themeTag: "個人私隱保護",
+        artType: "privacy",
+        question: "在網上玩遊戲時，一位陌生網友留言問：「你叫甚麼名字？在哪間小學讀書？住在哪一區呀？」聰明的小朋友應該怎樣做？",
+        options: [
+          { text: "禮貌地告訴他自己的真實姓名、學校和居住地區", correct: false },
+          { text: "絕對不告訴陌生人個人私隱，並立即告訴爸爸媽媽或老師", correct: true },
+          { text: "只告訴他自己就讀的學校名稱，其他資料不說", correct: false }
+        ],
+        feedback: "做得太好了！姓名、年齡、出生日期、學校名稱和居住區域都是非常重要的「個人私隱」，在網絡上千萬不能隨便公開給陌生人，保護自己最安全！"
+      },
+      {
+        id: 2,
+        category: "照片與影片安全",
+        badge: "第 2 關 · 尊重他人",
+        themeTag: "照片私隱保護",
+        artType: "camera",
+        question: "在學校活動中，小明拍下了同學跌倒的滑稽照片。小明想把照片上載到網上社交平台分享，他應該怎樣做？",
+        options: [
+          { text: "先徵得該位同學以及家長或老師的同意，尊重他人私隱", correct: true },
+          { text: "不用問同學，直接上載到網上跟大家一起分享取笑", correct: false },
+          { text: "偷偷發給網上朋友看，只要不寫出同學的名字就可以", correct: false }
+        ],
+        feedback: "答得好棒！拍了別人的照片或影片，未經對方和家長或老師同意，絕對不可以隨意上載到網絡！我們要學會尊重同學的感受與肖像私隱。"
+      },
+      {
+        id: 3,
+        category: "密碼保密小衛士",
+        badge: "第 3 關 · 密碼守門員",
+        themeTag: "密碼安全",
+        artType: "password",
+        question: "為了容易記住，小華想把電腦密碼設為簡單的「123456」，還打算把密碼分享給最要好的同班同學。他的做法正確嗎？",
+        options: [
+          { text: "正確，好朋友之間不用保守秘密，簡單密碼最方便", correct: false },
+          { text: "不正確！密碼不可隨意告訴同學，而且要設定難猜的密碼並定期更改", correct: true },
+          { text: "正確，只要同學答應不告訴其他人就可以分享密碼", correct: false }
+        ],
+        feedback: "非常正確！密碼就像家裏大門的鑰匙！除了爸爸媽媽，絕對不能告訴同學或朋友。我們要設定不易被猜中的密碼，並且要定期更換密碼喔！"
+      },
+      {
+        id: 4,
+        category: "尊重知識產權",
+        badge: "第 4 關 · 正版英雄",
+        themeTag: "拒絕盜版",
+        artType: "copyright",
+        question: "哥哥在網上發現一個不知名網站，聲稱可以「免費下載付費正版卡通電影與遊戲」。你應該怎樣提醒哥哥？",
+        options: [
+          { text: "提醒哥哥要尊重知識產權，拒絕下載盜版，應使用合法授權平台", correct: true },
+          { text: "太好了！叫哥哥趕快把所有免費電影和遊戲通通下載下來", correct: false },
+          { text: "只要自己偷偷觀看，不轉寄給別人知道就沒有問題", correct: false }
+        ],
+        feedback: "好聰明！創作人花了很多心血創作好作品。我們要尊重知識產權，拒絕使用盜版軟件、歌曲或電影，堅持支持正版，做個守法好公民！"
+      },
+      {
+        id: 5,
+        category: "專題研習資料搜集",
+        badge: "第 5 關 · 智慧探求",
+        themeTag: "可靠資訊",
+        artType: "research",
+        question: "常識科要做「香港動植物」專題研習，需要搜集真實準確的資料。以下哪種方法最值得推薦？",
+        options: [
+          { text: "只看討論區不知名網友隨便說的話，直接當成真實答案", correct: false },
+          { text: "到學校圖書館借閱圖書，或瀏覽政府、科學館等可靠官方網站找資料", correct: true },
+          { text: "隨便打開一個不知名網頁，看到第一句話就立刻抄下來", correct: false }
+        ],
+        feedback: "真優秀！搜集專題研習資料時，應該到圖書館借書或利用學校認可途徑瀏覽可靠的官方網站，並可以向老師或長輩求證資料的真實性！"
+      },
+      {
+        id: 6,
+        category: "拒絕抄襲他人報告",
+        badge: "第 6 關 · 誠實學風",
+        themeTag: "原創與誠實",
+        artType: "plagiarism",
+        question: "在做專題研習報告時，看到網頁上有一段寫得非常好的文字。你應該怎樣處理？",
+        options: [
+          { text: "直接「複製並貼上（Copy & Paste）」整段文字，假裝是自己寫的", correct: false },
+          { text: "閱讀理解後用自己的文字重新寫出，並在報告中註明資料來源", correct: true },
+          { text: "把同桌同學做好的功課拍下來，抄寫一份當成自己的報告", correct: false }
+        ],
+        feedback: "答得太出色了！直接抄襲或複製貼上別人的成果是不誠實的行為！我們要用自己的話重新組織寫出，並註明資料來自哪裏，這才是負責任的學習態度！"
+      },
+      {
+        id: 7,
+        category: "網絡安全求助",
+        badge: "第 7 關 · 機智特工",
+        themeTag: "求助防詐",
+        artType: "alert",
+        question: "使用電腦時，螢幕突然跳出閃爍廣告：「恭喜你中獎！請立即填寫你的電話號碼和屋企詳細地址領獎！」你應該怎樣做？",
+        options: [
+          { text: "立即關閉視窗，千萬不要填寫資料，並馬上告訴爸爸媽媽或老師", correct: true },
+          { text: "非常興奮，立刻輸入電話和屋企地址，等待免費禮物送上門", correct: false },
+          { text: "把這個中獎網址發給全班同學，邀請大家一起登記領獎", correct: false }
+        ],
+        feedback: "太機警了！這是網絡常見的陷阱。遇到奇怪的彈出式視窗、中獎訊息或索取個人資料的要求，切勿填寫，要立刻請家長或老師協助！"
+      }
+    ];
+
+    const BADGES_CONFIG = [
+      { id: "b1", icon: "🛡️", title: "私隱守護者", desc: "嚴格保守個人姓名學校與居住地區" },
+      { id: "b2", icon: "📸", title: "肖像尊重家", desc: "尊重他人私隱，先問許可才發佈相片" },
+      { id: "b3", icon: "🔑", title: "密碼保密星", desc: "妥善保管密碼不告訴同學，定期更換" },
+      { id: "b4", icon: "📀", title: "正版小先鋒", desc: "支持正版作品，拒絕下載盜版影音" },
+      { id: "b5", icon: "🌟", title: "模範數碼公民", desc: "完成所有研習與防護挑戰，誠實守法" }
+    ];
+
+    /* =========================================================
+       2. Web Audio API 合成音效引擎 (純樂音，絕無人聲旁白)
+       ========================================================= */
+    let audioCtx = null;
+    let isSoundOn = true;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    // 答對歡呼音效 (清脆向上的大三和弦琶音 C5 -> E5 -> G5 -> C6)
+    function playSoundCorrect() {
+      if (!isSoundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      try {
+        const now = audioCtx.currentTime;
+        const freqs = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        freqs.forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+
+          gain.gain.setValueAtTime(0, now + idx * 0.08);
+          gain.gain.linearRampToValueAtTime(0.25, now + idx * 0.08 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(now + idx * 0.08);
+          osc.stop(now + idx * 0.08 + 0.38);
+        });
+      } catch (e) {
+        console.warn('Audio play error:', e);
+      }
+    }
+
+    // 答錯提示音 (溫和友善的雙低音提示，非刺耳懲罰聲)
+    function playSoundWrong() {
+      if (!isSoundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      try {
+        const now = audioCtx.currentTime;
+        const freqs = [329.63, 261.63]; // E4 -> C4
+        freqs.forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.14);
+
+          gain.gain.setValueAtTime(0, now + idx * 0.14);
+          gain.gain.linearRampToValueAtTime(0.2, now + idx * 0.14 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.14 + 0.28);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(now + idx * 0.14);
+          osc.stop(now + idx * 0.14 + 0.3);
+        });
+      } catch (e) {
+        console.warn('Audio play error:', e);
+      }
+    }
+
+    // 按鍵觸擊音效 (泡泡彈跳點擊音)
+    function playSoundTap() {
+      if (!isSoundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      try {
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(540, now);
+        osc.frequency.exponentialRampToValueAtTime(220, now + 0.06);
+
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.07);
+      } catch (e) {
+        console.warn('Audio play error:', e);
+      }
+    }
+
+    // 通關慶祝勝利音效 (歡慶旋律與閃亮和弦)
+    function playSoundVictory() {
+      if (!isSoundOn) return;
+      initAudio();
+      if (!audioCtx) return;
+      try {
+        const now = audioCtx.currentTime;
+        // 慶祝旋律: G4, C5, E5, G5, pause, E5, G5
+        const notes = [
+          { f: 392.00, t: 0.0, d: 0.15 },
+          { f: 523.25, t: 0.15, d: 0.15 },
+          { f: 659.25, t: 0.30, d: 0.15 },
+          { f: 783.99, t: 0.45, d: 0.35 },
+          { f: 659.25, t: 0.85, d: 0.18 },
+          { f: 1046.50, t: 1.05, d: 0.6 }
+        ];
+
+        notes.forEach(n => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(n.f, now + n.t);
+
+          gain.gain.setValueAtTime(0, now + n.t);
+          gain.gain.linearRampToValueAtTime(0.28, now + n.t + 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + n.t + n.d);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(now + n.t);
+          osc.stop(now + n.t + n.d + 0.05);
+        });
+      } catch (e) {
+        console.warn('Audio play error:', e);
+      }
+    }
+
+    /* =========================================================
+       3. 向量情境插圖庫 (Inline SVGs)
+       ========================================================= */
+    function getScenarioSvg(type) {
+      switch (type) {
+        case 'privacy':
+          // 身份卡與秘密護盾
+          return `
+            <svg viewBox="0 0 200 120" width="180" height="110" aria-label="保護個人私隱插圖">
+              <rect x="25" y="20" width="150" height="85" rx="14" fill="#ffffff" stroke="#c2207f" stroke-width="3" />
+              <!-- ID photo placeholder -->
+              <rect x="40" y="35" width="38" height="48" rx="8" fill="#f8eef8" stroke="#f080c0" stroke-width="2" />
+              <circle cx="59" cy="52" r="10" fill="#c2207f" />
+              <path d="M47 75 C47 65 71 65 71 75" fill="#c2207f" />
+              <!-- Secret lock on text lines -->
+              <rect x="90" y="40" width="65" height="10" rx="5" fill="#f2e8f2" />
+              <rect x="90" y="56" width="50" height="10" rx="5" fill="#f2e8f2" />
+              <rect x="90" y="72" width="60" height="10" rx="5" fill="#f2e8f2" />
+              <!-- Big Secret Lock Badge -->
+              <g transform="translate(130, 25)">
+                <rect x="0" y="10" width="30" height="24" rx="6" fill="#7c52aa" />
+                <path d="M6 10 V4 C6 -3 24 -3 24 4 V10" stroke="#7c52aa" stroke-width="4" fill="none" />
+                <circle cx="15" cy="20" r="3" fill="#ffffff" />
+                <path d="M15 20 V25" stroke="#ffffff" stroke-width="2" />
+              </g>
+            </svg>
+          `;
+        case 'camera':
+          // 拍照與禮貌問候
+          return `
+            <svg viewBox="0 0 200 120" width="180" height="110" aria-label="照片上載先徵求同意插圖">
+              <!-- Camera body -->
+              <rect x="40" y="32" width="120" height="70" rx="16" fill="#0096cc" />
+              <path d="M75 32 L85 20 L115 20 L125 32 Z" fill="#0096cc" />
+              <circle cx="100" cy="67" r="24" fill="#ffffff" />
+              <circle cx="100" cy="67" r="16" fill="#2e1a28" />
+              <circle cx="95" cy="62" r="5" fill="#ffffff" />
+              <circle cx="140" cy="46" r="6" fill="#f080c0" />
+              <!-- Hand asking permission / Checkmark -->
+              <circle cx="160" cy="30" r="18" fill="#1b873f" />
+              <path d="M152 30 L158 36 L170 23" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+            </svg>
+          `;
+        case 'password':
+          // 密碼保密鎖與鑰匙
+          return `
+            <svg viewBox="0 0 200 120" width="180" height="110" aria-label="密碼保密小鑰匙插圖">
+              <!-- Password input box -->
+              <rect x="30" y="35" width="140" height="45" rx="22" fill="#ffffff" stroke="#7c52aa" stroke-width="3" />
+              <!-- Asterisk dots -->
+              <circle cx="55" cy="57" r="6" fill="#7c52aa" />
+              <circle cx="75" cy="57" r="6" fill="#7c52aa" />
+              <circle cx="95" cy="57" r="6" fill="#7c52aa" />
+              <circle cx="115" cy="57" r="6" fill="#7c52aa" />
+              <circle cx="135" cy="57" r="6" fill="#7c52aa" />
+              <!-- Golden key -->
+              <g transform="translate(140, 20) rotate(-25)">
+                <circle cx="15" cy="15" r="12" fill="none" stroke="#d96a00" stroke-width="5" />
+                <rect x="25" y="12" width="28" height="6" rx="2" fill="#d96a00" />
+                <rect x="42" y="18" width="5" height="7" fill="#d96a00" />
+                <rect x="49" y="18" width="4" height="9" fill="#d96a00" />
+              </g>
+            </svg>
+          `;
+        case 'copyright':
+          // 正版認證光碟與皇冠
+          return `
+            <svg viewBox="0 0 200 120" width="180" height="110" aria-label="尊重正版知識產權插圖">
+              <!-- CD Disc -->
+              <circle cx="85" cy="60" r="42" fill="#ffffff" stroke="#c2207f" stroke-width="4" />
+              <circle cx="85" cy="60" r="14" fill="#f8eef8" stroke="#c2207f" stroke-width="3" />
+              <circle cx="85" cy="60" r="6" fill="#ffffff" />
+              <!-- Music notes -->
+              <path d="M140 35 L140 55 M140 40 L160 33 L160 50 M140 55 A5 5 0 1 1 135 50 M160 50 A5 5 0 1 1 155 45" stroke="#7c52aa" stroke-width="3" stroke-linecap="round" fill="none" />
+              <!-- Authentic Seal Stamp -->
+              <circle cx="150" cy="85" r="22" fill="#d96a00" />
+              <circle cx="150" cy="85" r="18" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="3,3" />
+              <text x="150" y="90" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle">正版</text>
+            </svg>
+          `;
+        case 'research':
+          // 智慧貓頭鷹與圖書館書籍
+          return `
+            <svg viewBox="0 0 200 120" width="180" height="110" aria-label="到圖書館搜集專題資料插圖">
+              <!-- Books stacked -->
+              <rect x="35" y="75" width="85" height="18" rx="4" fill="#0096cc" />
+              <rect x="40" y="58" width="75" height="17" rx="4" fill="#c2207f" />
+              <rect x="45" y="42" width="65" height="16" rx="4" fill="#7c52aa" />
+              <!-- Magnifying glass -->
+              <g transform="translate(100, 25)">
+                <circle cx="35" cy="35" r="24" fill="#ffffff" stroke="#d96a00" stroke-width="4" />
+                <path d="M52 52 L75 75" stroke="#d96a00" stroke-width="7" stroke-linecap="round" />
+                <!-- Sparkle in glass -->
+                <polygon points="35,22 37,28 43,28 38,32 40,38 35,34 30,38 32,32 27,28 33,28" fill="#1b873f" />
+              </g>
+            </svg>
+          `;
+        case 'plagiarism':
+          // 筆記本與誠實自己寫筆記
+          return `
+            <svg viewBox="0 0 200 120" width="180" height="110" aria-label="不抄襲用自己文字寫報告插圖">
+              <!-- Notebook -->
+              <rect x="50" y="20" width="100" height="80" rx="8" fill="#ffffff" stroke="#7c52aa" stroke-width="3" />
+              <line x1="70" y1="20" x2="70" y2="100" stroke="#f080c0" stroke-width="2" />
+              <line x1="80" y1="40" x2="135" y2="40" stroke="#f2e8f2" stroke-width="3" stroke-linecap="round" />
+              <line x1="80" y1="55" x2="135" y2="55" stroke="#f2e8f2" stroke-width="3" stroke-linecap="round" />
+              <line x1="80" y1="70" x2="120" y2="70" stroke="#f2e8f2" stroke-width="3" stroke-linecap="round" />
+              <!-- Pencil writing -->
+              <g transform="translate(125, 25) rotate(35)">
+                <rect x="0" y="0" width="14" height="50" rx="2" fill="#d96a00" />
+                <polygon points="0,50 14,50 7,64" fill="#f8eef8" />
+                <polygon points="5,60 9,60 7,64" fill="#2e1a28" />
+                <rect x="0" y="0" width="14" height="10" rx="2" fill="#f080c0" />
+              </g>
+            </svg>
+          `;
+        case 'alert':
+          // 網絡危險警報盾牌
+          return `
+            <svg viewBox="0 0 200 120" width="180" height="110" aria-label="警惕彈出視窗與網絡陷阱插圖">
+              <!-- Screen window -->
+              <rect x="30" y="22" width="140" height="78" rx="10" fill="#ffffff" stroke="#c2207f" stroke-width="3" />
+              <rect x="30" y="22" width="140" height="18" fill="#c2207f" />
+              <circle cx="42" cy="31" r="3" fill="#ffffff" />
+              <circle cx="52" cy="31" r="3" fill="#ffffff" />
+              <!-- Warning badge -->
+              <polygon points="100,45 125,84 75,84" fill="#d96a00" />
+              <text x="100" y="78" font-size="22" font-weight="900" fill="#ffffff" text-anchor="middle">!</text>
+              <!-- Close button X -->
+              <circle cx="155" cy="31" r="5" fill="#f080c0" />
+              <path d="M152 28 L158 34 M158 28 L152 34" stroke="#ffffff" stroke-width="1.5" />
+            </svg>
+          `;
+        default:
+          return '';
+      }
+    }
+
+    /* =========================================================
+       4. 遊戲狀態管理與 State Persistence
+       ========================================================= */
+    const gameState = {
+      currentIndex: 0,
+      score: 0,
+      answered: false,
+      userAnswers: [], // 記錄每題是否答對
+      bestScore: 0,
+      completedCount: 0
+    };
+
+    async function loadSavedState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === 'function') {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved) {
+            if (typeof saved.bestScore === 'number') gameState.bestScore = saved.bestScore;
+            if (typeof saved.completedCount === 'number') gameState.completedCount = saved.completedCount;
+            if (typeof saved.isSoundOn === 'boolean') {
+              isSoundOn = saved.isSoundOn;
+              updateSoundBtnUI();
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Error loading state:', err);
+      }
+    }
+
+    async function persistState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === 'function') {
+          await window.notebookAppApi.setAppState({
+            bestScore: Math.max(gameState.bestScore, gameState.score),
+            completedCount: gameState.completedCount,
+            isSoundOn: isSoundOn
+          });
+        }
+      } catch (err) {
+        console.warn('Error persisting state:', err);
+      }
+    }
+
+    /* =========================================================
+       5. 畫面切換與 UI 渲染
+       ========================================================= */
+    function switchScreen(screenName) {
+      document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById('screen-' + screenName);
+      if (target) {
+        target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function updateSoundBtnUI() {
+      const soundIcon = document.getElementById('sound-icon');
+      const soundBtn = document.getElementById('sound-toggle-btn');
+      if (soundIcon) {
+        soundIcon.textContent = isSoundOn ? '🔊' : '🔇';
+      }
+      if (soundBtn) {
+        soundBtn.setAttribute('aria-label', isSoundOn ? '切換為靜音' : '切換為開啟音效');
+      }
+    }
+
+    function updateStarCounter() {
+      const starCountEl = document.getElementById('star-count');
+      const counterPill = document.getElementById('star-counter-display');
+      if (starCountEl) {
+        starCountEl.textContent = gameState.score;
+      }
+      if (counterPill) {
+        counterPill.classList.remove('pop');
+        void counterPill.offsetWidth; // trigger reflow
+        counterPill.classList.add('pop');
+      }
+    }
+
+    function renderProgressDots() {
+      const dotsContainer = document.getElementById('steps-dots-container');
+      if (!dotsContainer) return;
+      dotsContainer.innerHTML = '';
+      for (let i = 0; i < QUIZ_QUESTIONS.length; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'step-dot';
+        if (i < gameState.currentIndex) {
+          dot.classList.add('completed');
+        } else if (i === gameState.currentIndex) {
+          dot.classList.add('active');
+        }
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    function renderCurrentQuestion() {
+      const q = QUIZ_QUESTIONS[gameState.currentIndex];
+      if (!q) return;
+
+      gameState.answered = false;
+
+      // 更新頂部標籤與進度條
+      const indexLabel = document.getElementById('question-index-label');
+      const catLabel = document.getElementById('category-label');
+      const badgeText = document.getElementById('q-badge-text');
+      const themeTag = document.getElementById('q-theme-tag');
+      const progressBar = document.getElementById('progress-bar-fill');
+      const artBox = document.getElementById('scenario-illustration-box');
+      const promptText = document.getElementById('question-prompt-text');
+      const optionsBox = document.getElementById('options-container');
+      const feedbackCard = document.getElementById('feedback-card');
+
+      if (indexLabel) indexLabel.textContent = `關卡 ${gameState.currentIndex + 1} / ${QUIZ_QUESTIONS.length}`;
+      if (catLabel) catLabel.textContent = `🏷️ ${q.category}`;
+      if (badgeText) badgeText.textContent = q.badge;
+      if (themeTag) themeTag.textContent = q.themeTag;
+      if (progressBar) {
+        const percent = ((gameState.currentIndex + 1) / QUIZ_QUESTIONS.length) * 100;
+        progressBar.style.width = percent + '%';
+      }
+
+      renderProgressDots();
+
+      if (artBox) {
+        artBox.innerHTML = getScenarioSvg(q.artType);
+      }
+      if (promptText) {
+        promptText.textContent = q.question;
+      }
+
+      // 隱藏反饋卡
+      if (feedbackCard) {
+        feedbackCard.className = 'feedback-box';
+      }
+
+      // 渲染選項按鈕
+      if (optionsBox) {
+        optionsBox.innerHTML = '';
+        const letters = ['A', 'B', 'C'];
+        q.options.forEach((opt, idx) => {
+          const btn = document.createElement('button');
+          btn.className = 'option-btn';
+          btn.setAttribute('role', 'radio');
+          btn.setAttribute('aria-checked', 'false');
+          btn.setAttribute('tabindex', '0');
+
+          btn.innerHTML = `
+            <div class="option-letter" aria-hidden="true">${letters[idx]}</div>
+            <div class="option-text">${opt.text}</div>
+            <div class="option-status-icon" aria-hidden="true">${opt.correct ? '✔' : '✖'}</div>
+          `;
+
+          btn.onclick = function() {
+            handleAnswerSelect(idx);
+          };
+
+          optionsBox.appendChild(btn);
+        });
+      }
+    }
+
+    function handleAnswerSelect(selectedIndex) {
+      if (gameState.answered) return;
+      gameState.answered = true;
+
+      const q = QUIZ_QUESTIONS[gameState.currentIndex];
+      const isCorrect = q.options[selectedIndex].correct;
+      const optionsBox = document.getElementById('options-container');
+      const buttons = optionsBox ? optionsBox.querySelectorAll('.option-btn') : [];
+
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (q.options[idx].correct) {
+          btn.classList.add('state-correct');
+          btn.setAttribute('aria-checked', 'true');
+        } else if (idx === selectedIndex) {
+          btn.classList.add('state-wrong');
+          btn.setAttribute('aria-checked', 'true');
+        }
+      });
+
+      gameState.userAnswers[gameState.currentIndex] = isCorrect;
+
+      // 反饋卡片
+      const feedbackCard = document.getElementById('feedback-card');
+      const feedbackIcon = document.getElementById('feedback-icon');
+      const feedbackTitle = document.getElementById('feedback-title');
+      const feedbackText = document.getElementById('feedback-text');
+      const nextBtnText = document.getElementById('next-btn-text');
+
+      if (isCorrect) {
+        gameState.score++;
+        updateStarCounter();
+        playSoundCorrect();
+        triggerConfetti(60);
+
+        if (feedbackCard) feedbackCard.className = 'feedback-box correct';
+        if (feedbackIcon) feedbackIcon.textContent = '🎉';
+        if (feedbackTitle) feedbackTitle.textContent = '答對了！太厲害了！';
+      } else {
+        playSoundWrong();
+
+        if (feedbackCard) feedbackCard.className = 'feedback-box wrong';
+        if (feedbackIcon) feedbackIcon.textContent = '💡';
+        if (feedbackTitle) feedbackTitle.textContent = '差一點點！來看看小貼士';
+      }
+
+      if (feedbackText) feedbackText.textContent = q.feedback;
+
+      const isLastQuestion = (gameState.currentIndex === QUIZ_QUESTIONS.length - 1);
+      if (nextBtnText) {
+        nextBtnText.textContent = isLastQuestion ? '查看成績單 🏆' : '前往下一關 ➔';
+      }
+
+      // 自動聚焦到下一題按鈕以便輔助使用
+      setTimeout(() => {
+        const nextBtn = document.getElementById('next-question-btn');
+        if (nextBtn) nextBtn.focus();
+      }, 100);
+    }
+
+    function handleNextQuestion() {
+      playSoundTap();
+      if (gameState.currentIndex < QUIZ_QUESTIONS.length - 1) {
+        gameState.currentIndex++;
+        renderCurrentQuestion();
+      } else {
+        showGraduationScreen();
+      }
+    }
+
+    /* =========================================================
+       6. 通關結算畫面渲染
+       ========================================================= */
+    function showGraduationScreen() {
+      gameState.completedCount++;
+      persistState();
+      playSoundVictory();
+      triggerConfetti(180);
+
+      const statusTitle = document.getElementById('final-status-title');
+      const starsRow = document.getElementById('final-stars-row');
+      const scoreText = document.getElementById('final-score-text');
+      const commentary = document.getElementById('final-commentary-text');
+
+      if (scoreText) {
+        scoreText.textContent = `${gameState.score} / ${QUIZ_QUESTIONS.length} 題全對`;
+      }
+
+      // 星星顯示
+      if (starsRow) {
+        starsRow.innerHTML = '';
+        const starCount = Math.max(1, Math.round((gameState.score / QUIZ_QUESTIONS.length) * 5));
+        for (let i = 0; i < 5; i++) {
+          const star = document.createElement('span');
+          star.textContent = i < starCount ? '⭐' : '☆';
+          star.style.color = i < starCount ? 'var(--warning)' : 'var(--outline-variant)';
+          starsRow.appendChild(star);
+        }
+      }
+
+      // 榮譽稱號與短評
+      if (statusTitle && commentary) {
+        if (gameState.score === 7) {
+          statusTitle.innerHTML = '滿分通關！你是<em>特級數碼小衛士</em>！';
+          commentary.textContent = '太厲害了！你完全懂得保護個人私隱、守護密碼安全、尊重版權與誠實研習，堪稱全班的模範數碼小公民！';
+        } else if (gameState.score >= 5) {
+          statusTitle.innerHTML = '表現優秀！你是<em>卓越數碼小先鋒</em>！';
+          commentary.textContent = '做得很好！你已經掌握了大部分網絡安全與資訊素養要訣，記得複習溫習秘笈，做個更棒的小達人！';
+        } else {
+          statusTitle.innerHTML = '努力可嘉！你是<em>進步數碼小特工</em>！';
+          commentary.textContent = '多做幾次練習，仔細閱讀課文溫習秘笈，你一定能成為滿分數碼小衛士！';
+        }
+      }
+
+      // 徽章解鎖渲染
+      renderBadges();
+
+      switchScreen('result');
+    }
+
+    function renderBadges() {
+      const container = document.getElementById('unlocked-badges-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      BADGES_CONFIG.forEach(b => {
+        const card = document.createElement('div');
+        card.className = 'badge-item-card';
+        card.innerHTML = `
+          <div class="badge-graphic" aria-hidden="true">${b.icon}</div>
+          <div class="badge-name">${b.title}</div>
+          <div class="badge-desc">${b.desc}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function restartGame() {
+      playSoundTap();
+      gameState.currentIndex = 0;
+      gameState.score = 0;
+      gameState.answered = false;
+      gameState.userAnswers = [];
+      updateStarCounter();
+      renderCurrentQuestion();
+      switchScreen('quiz');
+    }
+
+    /* =========================================================
+       7. 領取數碼小公民獎狀 (下載或檢視)
+       ========================================================= */
+    function handleDownloadCert() {
+      playSoundTap();
+      const studentTitle = gameState.score === 7 ? '特級數碼小衛士' : '卓越數碼小先鋒';
+      const certContent = 
+`==============================================
+   🌟 香港小學二年級 · 數碼小公民大冒險 🌟
+             榮譽通關獎狀
+==============================================
+學生評級：${studentTitle}
+挑戰得分：${gameState.score} / ${QUIZ_QUESTIONS.length} 顆星星
+掌握技能：
+  ✔ 保守個人私隱（姓名、年齡、學校、住址）
+  ✔ 妥善保管密碼與定期更換
+  ✔ 相片影片先徵得他人同意才上載
+  ✔ 尊重知識產權，拒絕盜版影音
+  ✔ 專題研習到可靠官方途徑找資料
+  ✔ 拒絕抄襲，用自己文字並註明出處
+
+恭喜你成為一位負責任、有禮貌、重誠實的優質數碼小公民！
+==============================================`;
+
+      if (window.notebookAppApi && typeof window.notebookAppApi.triggerFileDownload === 'function') {
+        window.notebookAppApi.triggerFileDownload({
+          content: certContent,
+          contentType: 'text/plain',
+          encoding: 'UTF-8',
+          filename: '數碼小公民榮譽獎狀.txt'
+        });
+      } else {
+        // Fallback: 友好彈窗通知
+        alert("🎉 恭喜你完成挑戰！\n已為你記錄榮譽獎狀成就！做個最棒的負責任數碼小公民！");
+      }
+    }
+
+    /* =========================================================
+       8. 輕量彩紙慶祝效果 (Canvas Confetti)
+       ========================================================= */
+    const confettiCanvas = document.getElementById('confetti-canvas');
+    let confettiCtx = confettiCanvas ? confettiCanvas.getContext('2d') : null;
+    let confettiParticles = [];
+    let confettiAnimId = null;
+
+    function resizeCanvas() {
+      if (!confettiCanvas) return;
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function triggerConfetti(count = 70) {
+      if (!confettiCanvas || !confettiCtx) return;
+      const colors = ['#c2207f', '#7c52aa', '#0096cc', '#d96a00', '#1b873f', '#f080c0'];
+      const width = confettiCanvas.width;
+
+      for (let i = 0; i < count; i++) {
+        confettiParticles.push({
+          x: Math.random() * width,
+          y: -20 - Math.random() * 40,
+          w: 8 + Math.random() * 6,
+          h: 8 + Math.random() * 6,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: (Math.random() - 0.5) * 4,
+          vy: 2.5 + Math.random() * 4,
+          angle: Math.random() * 360,
+          spin: (Math.random() - 0.5) * 8
+        });
+      }
+
+      if (!confettiAnimId) {
+        updateConfetti();
+      }
+    }
+
+    function updateConfetti() {
+      if (!confettiCtx || !confettiCanvas) return;
+      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
+      for (let i = confettiParticles.length - 1; i >= 0; i--) {
+        const p = confettiParticles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.angle += p.spin;
+
+        confettiCtx.save();
+        confettiCtx.translate(p.x, p.y);
+        confettiCtx.rotate((p.angle * Math.PI) / 180);
+        confettiCtx.fillStyle = p.color;
+        confettiCtx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        confettiCtx.restore();
+
+        if (p.y > confettiCanvas.height + 20) {
+          confettiParticles.splice(i, 1);
+        }
+      }
+
+      if (confettiParticles.length > 0) {
+        confettiAnimId = requestAnimationFrame(updateConfetti);
+      } else {
+        confettiAnimId = null;
+        confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      }
+    }
+
+    /* =========================================================
+       9. 事件監聽綁定與初始化
+       ========================================================= */
+    document.addEventListener('DOMContentLoaded', async function() {
+      // 載入持久化狀態
+      await loadSavedState();
+
+      // 開始按鈕
+      const startBtn = document.getElementById('start-game-btn');
+      if (startBtn) {
+        startBtn.onclick = function() {
+          playSoundTap();
+          initAudio();
+          renderCurrentQuestion();
+          switchScreen('quiz');
+        };
+      }
+
+      // 下一題按鈕
+      const nextBtn = document.getElementById('next-question-btn');
+      if (nextBtn) {
+        nextBtn.onclick = handleNextQuestion;
+      }
+
+      // 重新開始按鈕
+      const restartBtn = document.getElementById('restart-game-btn');
+      if (restartBtn) {
+        restartBtn.onclick = restartGame;
+      }
+      const playAgainBtn = document.getElementById('play-again-btn');
+      if (playAgainBtn) {
+        playAgainBtn.onclick = restartGame;
+      }
+
+      // 領取獎狀按鈕
+      const downloadCertBtn = document.getElementById('download-cert-btn');
+      if (downloadCertBtn) {
+        downloadCertBtn.onclick = handleDownloadCert;
+      }
+
+      // 音效切換按鈕
+      const soundBtn = document.getElementById('sound-toggle-btn');
+      if (soundBtn) {
+        soundBtn.onclick = function() {
+          isSoundOn = !isSoundOn;
+          updateSoundBtnUI();
+          if (isSoundOn) {
+            initAudio();
+            playSoundTap();
+          }
+          persistState();
+        };
+      }
+
+      // 通知平台應用就緒
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === 'function') {
+        window.notebookAppApi.notifyAppReady();
+      }
+    });
+  </script>
+</body>
+</html>
